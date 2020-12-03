@@ -7,6 +7,9 @@ import logo from './image.jpg'
 import { cloneDeep } from 'lodash';
 import rawImage from './rawImage';
 
+//TODO:
+//- fix compatibility with image-js for single-spa
+//- handle better the rendering variable
 const INITIAL_SQUARE_NUMBER_WIDTH = 200;
 
 const DEV_MODE = false;
