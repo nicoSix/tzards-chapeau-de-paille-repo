@@ -17,15 +17,15 @@ if($_SERVER['REQUEST_METHOD'] == 'DELETE'){
     $db = $database->getConnection();
 
     // On instancie les produits
-    $produit = new Produits($db);
+    $user = new Users($db);
 
     // On récupère l'id du produit
     $donnees = json_decode(file_get_contents("php://input"));
 
-    if(!empty($donnees->id)){
-        $produit->id = $donnees->id;
+    if(!empty($donnees->idUti)){
+        $user->idUti = $donnees->idUti;
 
-        if($produit->supprimer()){
+        if($user->supprimer()){
             // Ici la suppression a fonctionné
             // On envoie un code 200
             http_response_code(200);

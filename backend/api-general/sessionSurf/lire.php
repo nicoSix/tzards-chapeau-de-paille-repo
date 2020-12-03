@@ -9,46 +9,47 @@ header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers
 // On vérifie que la méthode utilisée est correcte
 if($_SERVER['REQUEST_METHOD'] == 'GET'){
     // On inclut les fichiers de configuration et d'accès aux données
-    include_once '../config/Database.php';
-    include_once '../models/Produits.php';
+    include_once 'config/Database.php';
+    include_once 'models/Users.php';
 
     // On instancie la base de données
     $database = new Database();
     $db = $database->getConnection();
 
     // On instancie les produits
-    $produit = new Produits($db);
+    $users = new Users($db);
 
     // On récupère les données
-    $stmt = $produit->lire();
+    $stmt = $users->lire();
 
     // On vérifie si on a au moins 1 produit
     if($stmt->rowCount() > 0){
         // On initialise un tableau associatif
-        $tableauProduits = [];
-        $tableauProduits['produits'] = [];
+        $tableauUsers = [];
+        $tableauUsers['Users'] = [];
 
         // On parcourt les produits
         while($row = $stmt->fetch(PDO::FETCH_ASSOC)){
             extract($row);
 
-            $prod = [
-                "id" => $id,
-                "nom" => $nom,
-                "description" => $description,
-                "prix" => $prix,
-                "categories_id" => $categories_id,
-                "categories_nom" => $categories_nom
+            $user = [
+                "idUti" => $idUti,
+                "nomUti" => $nomUti,
+                "prenomUti" => $prenomUti,
+                "numTelUti" => $numTelUti,
+                "mailUti" => $mailUti,
+                "mdpUti" => $mdpUti,
+                "admin" => $admin
             ];
 
-            $tableauProduits['produits'][] = $prod;
+            $tableauUsers['Users'][] = $user;
         }
 
         // On envoie le code réponse 200 OK
         http_response_code(200);
 
         // On encode en json et on envoie
-        echo json_encode($tableauProduits);
+        echo json_encode($tableauUsers);
     }
 
 }else{

@@ -2,12 +2,12 @@
 // Headers requis
 header("Access-Control-Allow-Origin: *");
 header("Content-Type: application/json; charset=UTF-8");
-header("Access-Control-Allow-Methods: POST");
+header("Access-Control-Allow-Methods: DELETE");
 header("Access-Control-Max-Age: 3600");
 header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With");
 
-// On vérifie la méthode
-if($_SERVER['REQUEST_METHOD'] == 'POST'){
+// On vérifie que la méthode utilisée est correcte
+if($_SERVER['REQUEST_METHOD'] == 'DELETE'){
     // On inclut les fichiers de configuration et d'accès aux données
     include_once '../config/Database.php';
     include_once '../models/Produits.php';
@@ -17,29 +17,24 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
     $db = $database->getConnection();
 
     // On instancie les produits
-    $produit = new Produits($db);
+    $user = new Users($db);
 
-    // On récupère les informations envoyées
+    // On récupère l'id du produit
     $donnees = json_decode(file_get_contents("php://input"));
-    
-    if(!empty($donnees->nom) && !empty($donnees->description) && !empty($donnees->prix) && !empty($donnees->categories_id)){
-        // Ici on a reçu les données
-        // On hydrate notre objet
-        $produit->nom = $donnees->nom;
-        $produit->description = $donnees->description;
-        $produit->prix = $donnees->prix;
-        $produit->categories_id = $donnees->categories_id;
 
-        if($produit->creer()){
-            // Ici la création a fonctionné
-            // On envoie un code 201
-            http_response_code(201);
-            echo json_encode(["message" => "L'ajout a été effectué"]);
+    if(!empty($donnees->idUti)){
+        $user->idUti = $donnees->idUti;
+
+        if($user->supprimer()){
+            // Ici la suppression a fonctionné
+            // On envoie un code 200
+            http_response_code(200);
+            echo json_encode(["message" => "La suppression a été effectuée"]);
         }else{
             // Ici la création n'a pas fonctionné
             // On envoie un code 503
             http_response_code(503);
-            echo json_encode(["message" => "L'ajout n'a pas été effectué"]);         
+            echo json_encode(["message" => "La suppression n'a pas été effectuée"]);         
         }
     }
 }else{
