@@ -2,9 +2,10 @@ import React, { useEffect, useState, useRef } from 'react'
 import P5Wrapper from 'react-p5-wrapper';
 import './style.css';
 import SketchObject from './sketch';
-import { Image } from 'image-js';
+//import { Image } from 'image-js';
 import logo from './image.jpg'
 import { cloneDeep } from 'lodash';
+import rawImage from './rawImage';
 
 const INITIAL_SQUARE_NUMBER_WIDTH = 200;
 
@@ -20,12 +21,14 @@ const GOL = () => {
         return newArray;
     }
 
-    const initGrid = async () => {
-        var loaded = await Image.load(logo);
-        loaded = loaded.resize({width: 60})
+    const initGrid = () => {
+        // image-js image live loading was disabled because it brings conflicts with single-spa, but works as a standalone
+        /*var loaded = await Image.load(logo);
+        loaded = loaded.resize({width: 60})*/
         const maxX = parseInt(INITIAL_SQUARE_NUMBER_WIDTH);
         const maxY = parseInt(INITIAL_SQUARE_NUMBER_WIDTH*(window.innerHeight/window.innerWidth));
-        var rgbArray = parseRgbArray(loaded.getPixelsArray(), loaded.width);
+        //var rgbArray = parseRgbArray(loaded.getPixelsArray(), loaded.width);
+        const rgbArray = rawImage.rawImage;
         var widthRgbArray = rgbArray.length;
         var heightRgbArray = rgbArray[0].length;
         var xStartImage = parseInt((maxX/2) - (widthRgbArray/2))
@@ -121,7 +124,6 @@ const GOL = () => {
     })
 
     useEffect(() => {
-        // UNSTABLE (need to handle the removal of squares)
         window.addEventListener("resize", handleDimensionChange);
         
         const interval = setInterval(gameRoundHandler, 400);
@@ -133,11 +135,17 @@ const GOL = () => {
     })
 
     useEffect(() => {
-        initGrid().then(grid => {
+        /*initGrid().then(grid => {
             setState({
                 ...state,
                 squareGrid: grid
             })
+        })*/
+
+        const grid = initGrid();
+        setState({
+            ...state,
+            squareGrid: grid
         })
     }, []);
   
