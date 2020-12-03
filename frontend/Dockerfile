@@ -9,6 +9,7 @@ RUN ls -la dist
 RUN mv "/usr/var/share/config/nginx.conf" "/etc/nginx/nginx.conf"
 RUN cp -rf "/usr/var/share/dist" "/usr/share/nginx/html/"
 RUN cp "/usr/var/share/index.html" "/usr/share/nginx/html/"
+#RUN cp -rf "/usr/var/share/public" "/usr/share/nginx/html/"
 RUN ls /usr/share/nginx/html
 RUN cat /usr/share/nginx/html/50x.html
 EXPOSE 80 443

@@ -4,6 +4,7 @@ export default function SketchObject(p5) {
     let height = 0;
     let width = 0;
     let devMode = false;
+    let doTheDraw = true;
     let squareGrid = [];
     let parentRendered = false;
 
@@ -19,13 +20,14 @@ export default function SketchObject(p5) {
             devMode = true;
         }
         
+        doTheDraw = props.doTheDraw;
         squareSize = props.squareSize;
         squareGrid = props.squareGrid;
         parentRendered = true;
     }
 
     p5.draw = () => {
-        if(parentRendered) {
+        if(parentRendered && squareGrid.length && doTheDraw) {
             p5.background(250);
 
             //grid is displayed on devmode only
@@ -39,14 +41,23 @@ export default function SketchObject(p5) {
 
             p5.noFill();
 
-            var stol = width / squareSize;
-            for(let i =0; i*stol < width;i++) {
-                for(let j=0; j*stol < height;j++) {
-                    if(squareGrid[i][j]) p5.fill('#222222');
+            var stol = parseInt(width / squareSize);
+            for(let i =0; i < squareSize;i++) {
+                for(let j=0; j < parseInt(squareSize*(height/width));j++) {
+                    if(squareGrid[i][j]['living']) {
+                        if(squareGrid[i][j]["rgb"]) {
+                            p5.fill(squareGrid[i][j]["rgb"]);
+                        }
+                        else {
+                            p5.fill('#222222');
+                        }
+                    }
                     else p5.noFill(); 
                     p5.rect(i*stol,j*stol,stol,stol);
                 }
             }
         }
+
+        if(!doTheDraw) p5.clear();
     }
   };

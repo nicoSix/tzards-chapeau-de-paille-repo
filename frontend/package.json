@@ -4,6 +4,9 @@
   "main": "index.js",
   "license": "MIT",
   "dependencies": {
+    "google-maps-api-loader": "^1.1.1",
+    "image-js": "^0.31.1",
+    "lodash": "^4.17.20",
     "p5": "^1.1.9",
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
