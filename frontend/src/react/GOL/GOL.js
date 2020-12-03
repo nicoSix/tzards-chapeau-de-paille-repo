@@ -120,7 +120,8 @@ const GOL = () => {
             h: window.innerHeight
         },
         squareGrid: [],
-        squareSize: INITIAL_SQUARE_NUMBER_WIDTH
+        squareSize: INITIAL_SQUARE_NUMBER_WIDTH,
+        doTheDraw: true
     })
 
     useEffect(() => {
@@ -133,6 +134,28 @@ const GOL = () => {
             clearInterval(interval)
         }
     })
+
+    const handleDisplayComponent = () => {
+        if(state.doTheDraw) {
+            setState({
+                ...state,
+                doTheDraw: false
+            })
+
+            document.getElementById('react').setAttribute("hidden", "true");
+        }
+        else {
+            const grid = initGrid();
+
+            setState({
+                ...state,
+                doTheDraw: true,
+                squareGrid: grid
+            })
+
+            document.getElementById('react').setAttribute("hidden", "false");
+        }
+    }
 
     useEffect(() => {
         /*initGrid().then(grid => {
@@ -147,10 +170,14 @@ const GOL = () => {
             ...state,
             squareGrid: grid
         })
+
+        setTimeout(handleDisplayComponent, 3000);
+        setTimeout(handleDisplayComponent, 6000);
+
     }, []);
   
     // Note : the component triggers a redraw + prop change whenever the parent component (GOF) is mounted
-    return <P5Wrapper sketch={SketchObject} dimensions={state.dimensions} squareSize={state.squareSize} squareGrid={state.squareGrid} devMode={DEV_MODE}/>
+    return <P5Wrapper sketch={SketchObject} dimensions={state.dimensions} squareSize={state.squareSize} squareGrid={state.squareGrid} devMode={DEV_MODE} doTheDraw={state.doTheDraw}/>
 }
 
 export default GOL
