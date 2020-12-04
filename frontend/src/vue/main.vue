@@ -81,23 +81,30 @@
           <template #lead> </template>
 
           <hr class="my-4" />
-
-          <b-card v-for="se in sessions" :key="se.idSessionSurf"
-              v-bind:title="se.idSessionSurf"
-              img-src="https://picsum.photos/600/300/?image=25"
-              img-alt="Image"
-              img-top
-              tag="article"
-              style="max-width: 20rem;"
-              class="mb-2"
-            >
-            <b-card-text>
-              {{se.avisSession}}
-              {{se.frequentation}}
-            </b-card-text>
-
-            <b-button href="#" variant="primary">Go somewhere</b-button>
-          </b-card>
+          <b-row>
+            <b-col v-for="se in sessions" :key="se.idSessionSurf">
+              <b-card
+                  v-bind:title="se.idSessionSurf"
+                  img-src="https://picsum.photos/100/100?random=1"
+                  img-alt="Image"
+                  img-top
+                  tag="article"
+                  style="max-width: 20rem;"
+                  class="mb-2"
+                >
+                <b-card-text>
+                  {{se.avisSession}}
+                  {{se.frequentation}}
+                </b-card-text>
+                <b-button v-b-modal.alertmodal>
+                  Alert
+                </b-button>
+              </b-card>
+          </b-col>
+          </b-row>
+          <b-button v-b-modal.addmodal>
+            Add
+          </b-button>
         </b-jumbotron>
       </b-container>
     </div>
@@ -130,6 +137,34 @@
         ></b-form-input>
       </b-input-group>
     </b-modal>
+    <b-modal
+      id="addmodal"
+      title="Add New Session"
+      @ok="handleOk_session"
+      @hidden="close_session"
+      @show="resetModal_session"
+    >
+      <b-input-group class="mb-2">
+        <b-form-input
+          placeholder="Id"
+          v-model="new_session.idSessionSurf"
+        ></b-form-input>
+      </b-input-group>
+    </b-modal>
+    <b-modal
+      id="alertmodal"
+      title="Add New Alert"
+      @ok="handleOk_session"
+      @hidden="close_session"
+      @show="resetModal_session"
+    >
+      <b-input-group class="mb-2">
+        <b-form-input
+          placeholder="Tell us what happened"
+          v-model="alertText"
+        ></b-form-input>
+      </b-input-group>
+    </b-modal>
   </div>
 </template>
 
@@ -147,7 +182,16 @@ export default {
       show_modal: false,
       not_submit: true,
       start: true,
-      sessions: []
+      sessions: [],
+      session_modal: true,
+      new_session: {
+        idSessionSurf: 0,
+        dateDebut : "2012-04-23T18:25:43.511Z",
+        dateFin : "2012-04-23T20:25:43.511Z",
+        avisSession : 4.5,
+        frequentation : "Peu fréquenté"
+      },
+      alertText: ''
     };
   },
   created: function () {
@@ -174,6 +218,12 @@ export default {
     });
   },
   methods: {
+    handleOk_session(){
+      this.handleSubmitSession();
+    },
+    handleSubmitSession(bvModalEvt){
+      this.sessions.push({...this.new_session});
+    },
     randomValue() {
       this.value = Math.random() * this.max;
     },
@@ -197,6 +247,9 @@ export default {
     close() {
       this.start = false
     },
+    addSession(){
+      this.session_modal = true;
+    }
   },
   computed: {
     show: function () {
