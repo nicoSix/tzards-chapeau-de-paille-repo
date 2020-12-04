@@ -22,15 +22,18 @@ if($_SERVER['REQUEST_METHOD'] == 'PUT'){
     // On récupère les informations envoyées
     $donnees = json_decode(file_get_contents("php://input"));
     
-    if(!empty($donnees->idUti) && !empty($donnees->nomUti) && !empty($donnees->prenomUti) && !empty($donnees->numTelUti) && !empty($donnees->admin)){
+    if(!empty($donnees->dateDebut) && !empty($donnees->dateFin) && !empty($donnees->avisSession) && !empty($donnees->frequentation) && !empty($donnees->latitude) && !empty($donnees->longitude)
+    && !empty($donnees->idLieu)){        
         // Ici on a reçu les données
         // On hydrate notre objet
-        $user->idUti = $donnees->idUti;
-        $user->nomUti = $donnees->nomUti;
-        $user->prenomUti = $donnees->prenomUti;
-        $user->numTelUti = $donnees->numTelUti;
-        $user->mdpUti = $donnees->mdpUti;
-        $user->admin = $donnees->admin;
+        $session->idSessionSurf = $donnees->idSessionSurf;
+        $session->dateDebut = $donnees->dateDebut;
+        $session->dateFin = $donnees->dateFin;
+        $session->avisSession = $donnees->avisSession;
+        $session->frequentation = $donnees->frequentation;
+        $session->latitude = $donnees->latitude;
+        $session->longitude = $donnees->longitude;
+        $session->idLieu = $donnees->idLieu;
 
         if($user->modifier()){
             // Ici la modification a fonctionné

@@ -17,12 +17,20 @@ $router->map('GET', '/session', function () {
     require_once 'sessionSurf/lire.php';
 });
 
-$router->map('GET', '/session/[]', function () {
-    require_once 'sessionSurf/lire_un.php';
-});
-
 $router->map('POST', '/session', function () {
     require_once 'sessionSurf/creer.php';
+});
+
+$router->map('GET', '/session/[i:id]', function () {
+    require_once 'sessionSurf/lire_un.php&id=' . $id;
+});
+
+$router->map('PUT', '/session/[i:id]', function () {
+    require_once 'sessionSurf/modifier.php&id=' . $id;
+});
+
+$router->map('DELETE', '/session/[i:id]', function () {
+    require_once 'sessionSurf/modifier.php&id=' . $id;
 });
 
 $match = $router->match();

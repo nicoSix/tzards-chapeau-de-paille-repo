@@ -1,17 +1,18 @@
 <?php
-class Users{
+class Session{
     // Connexion
     private $connexion;
-    private $table = "users";
+    private $table = "sessionSurf";
 
     // object properties
-    public $idUti;
-    public $nomUti;
-    public $prenomUti;
-    public $numTelUti;
-    public $mailUti;
-    public $mdpUti;
-    public $admin;
+    public $idSessionSurf;
+    public $dateDebut;
+    public $dateFin;
+    public $avisSession;
+    public $frequentation;
+    public $latitude;
+    public $longitude;
+    public $idLieu;
 
     /**
      * Constructeur avec $db pour la connexion à la base de données
@@ -20,6 +21,9 @@ class Users{
      */
     public function __construct($db){
         $this->connexion = $db;
+        if(isset($_GET['id'])){
+            $this->idSessionSurf =$_GET['id'];
+        } 
     }
 
     public function lire(){
@@ -44,26 +48,29 @@ class Users{
     public function creer(){
 
         // Ecriture de la requête SQL en y insérant le nom de la table
-        $sql = "INSERT INTO " . $this->table . " SET nomUti=:nomUti, prenomUti=:prenomUti, numTelUti=:numTelUti, mailUti=:mailUti, mdpUti=:mdpUti, admin=:admin";
+        $sql = "INSERT INTO " . $this->table . " SET longitude=:longitude, idLieu=:idLieu, dateDebut=:dateDebut, dateFin=:dateFin, avisSession=:avisSession, frequentation=:frequentation, latitude=:latitude";
 
         // Préparation de la requête
         $query = $this->connexion->prepare($sql);
 
         // Protection contre les injections
-        $this->nomUti=htmlspecialchars(strip_tags($this->nomUti));
-        $this->prenomUti=htmlspecialchars(strip_tags($this->prenomUti));
-        $this->mailUti=htmlspecialchars(strip_tags($this->mailUti));
-        $this->numTelUti=htmlspecialchars(strip_tags($this->numTelUti));
-        $this->mdpUti=htmlspecialchars(strip_tags($this->mdpUti));
-        $this->admin=htmlspecialchars(strip_tags($this->admin));
+        $this->idLieu=htmlspecialchars(strip_tags($this->idLieu));
+        $this->dateDebut=htmlspecialchars(strip_tags($this->dateDebut));
+        $this->dateFin=htmlspecialchars(strip_tags($this->dateFin));
+        $this->avisSession=htmlspecialchars(strip_tags($this->avisSession));
+        $this->frequentation=htmlspecialchars(strip_tags($this->frequentation));
+        $this->latitude=htmlspecialchars(strip_tags($this->latitude));
+        $this->longitude=htmlspecialchars(strip_tags($this->longitude));
+
 
         // Ajout des données protégées
-        $query->bindParam(":nomUti", $this->nomUti);
-        $query->bindParam(":prenomUti", $this->prenomUti);
-        $query->bindParam(":numTelUti", $this->numTelUti);
-        $query->bindParam(":mailUti", $this->mailUti);
-        $query->bindParam(":mdpUti", $this->mdpUti);
-        $query->bindParam(":admin", $this->admin);
+        $query->bindParam(":idLieu", $this->idLieu);
+        $query->bindParam(":dateDebut", $this->dateDebut);
+        $query->bindParam(":dateFin", $this->dateFin);
+        $query->bindParam(":frequentation", $this->frequentation);
+        $query->bindParam(":avisSession", $this->avisSession);
+        $query->bindParam(":latitude", $this->latitude);
+        $query->bindParam(":longitude", $this->longitude);
 
 
         // Exécution de la requête

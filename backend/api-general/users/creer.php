@@ -43,7 +43,7 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
             // On envoie un code 503
             http_response_code(503);
             echo json_encode(["message" => "L'ajout n'a pas été effectué"]);         
-        }
+        } 
     }
     }else{
     // On gère l'erreur

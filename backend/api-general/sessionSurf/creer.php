@@ -8,6 +8,7 @@ header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers
 
 // On vérifie la méthode
 if($_SERVER['REQUEST_METHOD'] == 'POST'){
+
     // On inclut les fichiers de configuration et d'accès aux données
 
     include_once 'config/Database.php';
@@ -18,23 +19,24 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
     $db = $database->getConnection();
 
     // On instancie les produits
-    $session = new SessionSurf($db);
+    $session = new Session($db);
 
     // On récupère les informations envoyées
-    $data = json_decode(file_get_contents('php://input'), true);
+    $donnees = json_decode(file_get_contents('php://input'));
 
-    echo 'a';
-    if(!empty($donnees->dateDebut) && !empty($donnees->dateFin) && !empty($donnees->avisSession) && !empty($donnees->frequentation) && !empty($donnees->latitude) && !empty($donnees->longtitude)){
+    if(!empty($donnees->dateDebut) && !empty($donnees->dateFin) && !empty($donnees->avisSession) && !empty($donnees->frequentation) && !empty($donnees->latitude) && !empty($donnees->longitude)
+&& !empty($donnees->idLieu)){
         // Ici on a reçu les données
         // On hydrate notre objet
-        $users->dateDebut = $donnees->dateDebut;
-        $users->dateFin = $donnees->dateFin;
-        $users->avisSession = $donnees->avisSession;
-        $users->frequentation = $donnees->frequentation;
-        $users->latitude = $donnees->latitude;
-        $users->longtitude = $donnees->longtitude;
+        $session->dateDebut = $donnees->dateDebut;
+        $session->dateFin = $donnees->dateFin;
+        $session->avisSession = $donnees->avisSession;
+        $session->frequentation = $donnees->frequentation;
+        $session->latitude = $donnees->latitude;
+        $session->longitude = $donnees->longitude;
+        $session->idLieu = $donnees->idLieu;
 
-        if($users->creer()){
+        if($session->creer()){
             // Ici la création a fonctionné
             // On envoie un code 201
             http_response_code(201);
@@ -45,7 +47,7 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
             http_response_code(503);
             echo json_encode(["message" => "L'ajout n'a pas été effectué"]);         
         }
-    }
+        }
 }else{
     // On gère l'erreur
     http_response_code(405);

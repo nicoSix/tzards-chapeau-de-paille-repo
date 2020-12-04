@@ -2,7 +2,7 @@
 class Users{
     // Connexion
     private $connexion;
-    private $table = "users";
+    private $table = "Utilisateur";
 
     // object properties
     public $idUti;
