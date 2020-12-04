@@ -10,14 +10,14 @@ header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers
 if($_SERVER['REQUEST_METHOD'] == 'PUT'){
     // On inclut les fichiers de configuration et d'accès aux données
     include_once 'config/Database.php';
-    include_once 'models/Session.php';
+    include_once 'models/Lieu.php';
 
     // On instancie la base de données
     $database = new Database();
     $db = $database->getConnection();
 
     // On instancie les produits
-    $session = new Session($db);
+    $lieu = new Lieu($db);
 
     // On récupère les informations envoyées
     $donnees = json_decode(file_get_contents("php://input"));
@@ -26,15 +26,17 @@ if($_SERVER['REQUEST_METHOD'] == 'PUT'){
         && !empty($donnees->idMaree) && !empty($donnees->idEvenement) && !empty($donnees->idCompo) && !empty($donnees->idMeteo)){     
         // Ici on a reçu les données
         // On hydrate notre objet
-        $session->dateDebut = $donnees->dateDebut;
-        $session->dateFin = $donnees->dateFin;
-        $session->avisSession = $donnees->avisSession;
-        $session->frequentation = $donnees->frequentation;
-        $session->latitude = $donnees->latitude;
-        $session->longitude = $donnees->longitude;
-        $session->idLieu = $donnees->idLieu;
+        $lieu->ville = $donnees->ville;
+        $lieu->pays = $donnees->pays;
+        $lieu->photoLieu = $donnees->photoLieu;
+        $lieu->idTemperatureEau = $donnees->idTemperatureEau;
+        $lieu->idHoule = $donnees->idHoule;
+        $lieu->idMaree = $donnees->idMaree;
+        $lieu->idEvenement = $donnees->idEvenement;
+        $lieu->idCompo = $donnees->idCompo;
+        $lieu->idMeteo = $donnees->idMeteo;
 
-        if($session->modifier()){
+        if($lieu->modifier()){
             // Ici la modification a fonctionné
             // On envoie un code 200
             http_response_code(200);

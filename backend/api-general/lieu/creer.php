@@ -27,18 +27,18 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
         && !empty($donnees->idMaree) && !empty($donnees->idEvenement) && !empty($donnees->idCompo) && !empty($donnees->idMeteo)){
             // Ici on a reçu les données
             // On hydrate notre objet
-            $users->ville = $donnees->ville;
-            $users->pays = $donnees->pays;
-            $users->photoLieu = $donnees->photoLieu;
-            $users->idTemperatureEau = $donnees->idTemperatureEau;
-            $users->idHoule = $donnees->idHoule;
-            $users->idMaree = $donnees->idMaree;
-            $users->idEvenement = $donnees->idEvenement;
-            $users->idCompo = $donnees->idCompo;
-            $users->idMeteo = $donnees->idMeteo;
+            $lieu->ville = $donnees->ville;
+            $lieu->pays = $donnees->pays;
+            $lieu->photoLieu = $donnees->photoLieu;
+            $lieu->idTemperatureEau = $donnees->idTemperatureEau;
+            $lieu->idHoule = $donnees->idHoule;
+            $lieu->idMaree = $donnees->idMaree;
+            $lieu->idEvenement = $donnees->idEvenement;
+            $lieu->idCompo = $donnees->idCompo;
+            $lieu->idMeteo = $donnees->idMeteo;
     
 
-            if($users->creer()){
+            if($lieu->creer()){
                 // Ici la création a fonctionné
                 // On envoie un code 201
                 http_response_code(201);

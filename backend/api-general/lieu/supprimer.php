@@ -10,19 +10,21 @@ header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers
 if($_SERVER['REQUEST_METHOD'] == 'DELETE'){
     // On inclut les fichiers de configuration et d'accès aux données
     include_once 'config/Database.php';
-    include_once 'models/Session.php';
+    include_once 'models/Lieu.php';
 
     // On instancie la base de données
     $database = new Database();
     $db = $database->getConnection();
 
     // On instancie les produits
-    $session = new Session($db);
+    $lieu = new Lieu($db);
 
     // On récupère l'id du produit
     $donnees = json_decode(file_get_contents("php://input"));
 
-        if($session->supprimer()){
+        //$lieu->idLieu = $donnees->idLieu;
+
+        if($lieu->supprimer()){
             // Ici la suppression a fonctionné
             // On envoie un code 200
             http_response_code(200);

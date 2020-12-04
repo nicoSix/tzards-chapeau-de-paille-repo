@@ -23,6 +23,9 @@ class Lieu{
      */
     public function __construct($db){
         $this->connexion = $db;
+        if(isset($_GET['id'])){
+            $this->idSessionSurf =$_GET['id'];
+        } 
     }
 
     public function lire(){
@@ -47,29 +50,37 @@ class Lieu{
     public function creer(){
 
         // Ecriture de la requête SQL en y insérant le nom de la table
-        $sql = "INSERT INTO " . $this->table . " SET longitude=:longitude, idLieu=:idLieu, dateDebut=:dateDebut, dateFin=:dateFin, avisSession=:avisSession, frequentation=:frequentation, latitude=:latitude";
-
+        $sql = "INSERT INTO " . $this->table . " SET ville=:ville, pays=:pays, photoLieu=:photoLieu, idTemperatureEau=:idTemperatureEau, 
+        idHoule=:idHoule, idMaree=:idMaree, idEvenement=:idEvenement, idCompo=:idCompo, idMeteo=:idMeteo";
+        
         // Préparation de la requête
         $query = $this->connexion->prepare($sql);
 
         // Protection contre les injections
-        $this->idLieu=htmlspecialchars(strip_tags($this->idLieu));
-        $this->dateDebut=htmlspecialchars(strip_tags($this->dateDebut));
-        $this->dateFin=htmlspecialchars(strip_tags($this->dateFin));
-        $this->avisSession=htmlspecialchars(strip_tags($this->avisSession));
-        $this->frequentation=htmlspecialchars(strip_tags($this->frequentation));
-        $this->latitude=htmlspecialchars(strip_tags($this->latitude));
-        $this->longitude=htmlspecialchars(strip_tags($this->longitude));
+        $this->ville=htmlspecialchars(strip_tags($this->ville));
+        $this->pays=htmlspecialchars(strip_tags($this->pays));
+        $this->photoLieu=htmlspecialchars(strip_tags($this->photoLieu));
+        $this->idMaree=htmlspecialchars(strip_tags($this->idMaree));
+        $this->idHoule=htmlspecialchars(strip_tags($this->idHoule));
+        $this->idEvenement=htmlspecialchars(strip_tags($this->idEvenement));
+        $this->idCompo=htmlspecialchars(strip_tags($this->idCompo));
+        $this->idMeteo=htmlspecialchars(strip_tags($this->idMeteo));
+        $this->idTemperatureEau=htmlspecialchars(strip_tags($this->idTemperatureEau));
 
 
         // Ajout des données protégées
-        $query->bindParam(":idLieu", $this->idLieu);
-        $query->bindParam(":dateDebut", $this->dateDebut);
-        $query->bindParam(":dateFin", $this->dateFin);
-        $query->bindParam(":frequentation", $this->frequentation);
-        $query->bindParam(":avisSession", $this->avisSession);
-        $query->bindParam(":latitude", $this->latitude);
-        $query->bindParam(":longitude", $this->longitude);
+        $query->bindParam(":ville", $this->ville);
+        $query->bindParam(":pays", $this->pays);
+        $query->bindParam(":photoLieu", $this->photoLieu);
+        $query->bindParam(":idHoule", $this->idHoule);
+        $query->bindParam(":idMaree", $this->idMaree);
+        $query->bindParam(":idEvenement", $this->idEvenement);
+        $query->bindParam(":idCompo", $this->idCompo);
+        $query->bindParam(":idMeteo", $this->idMeteo);
+        $query->bindParam(":idTemperatureEau", $this->idTemperatureEau);
+
+
+        
 
 
         // Exécution de la requête
@@ -86,12 +97,12 @@ class Lieu{
      */
     public function lireUn(){
         // On écrit la requête
-        $sql = "SELECT * FROM $this->table WHERE idSessionSurf = :idSessionSurf";
+        $sql = "SELECT * FROM $this->table WHERE idLieu = :idLieu";
 
         // On prépare la requête
         $query = $this->connexion->prepare($sql);
-        $this->idSessionSurf=htmlspecialchars(strip_tags($this->idSessionSurf));
-        $query->bindParam(":idSessionSurf", $this->idSessionSurf);
+        $this->idLieu=htmlspecialchars(strip_tags($this->idLieu));
+        $query->bindParam(":idLieu", $this->idLieu);
 
         // On exécute la requête
         $query->execute();
@@ -100,13 +111,17 @@ class Lieu{
         $row = $query->fetch(PDO::FETCH_ASSOC);
         
         // On hydrate l'objet
-        $this->dateDebut = $row['dateDebut'];
-        $this->dateFin = $row['dateFin'];
-        $this->frequentation = $row['frequentation'];
-        $this->latitude = $row['latitude'];
-        $this->longitude = $row['longitude'];
-        $this->idLieu = $row['idLieu'];
-        $this->avisSession = $row['avisSession'];
+        //$this->idLieu = $row['idLieu'];
+        $this->ville = $row['ville'];
+        $this->pays = $row['pays'];
+        $this->photoLieu = $row['photoLieu'];
+        $this->idTemperatureEau = $row['idTemperatureEau'];
+        $this->idHoule = $row['idHoule'];
+        $this->idMaree = $row['idMaree'];
+        $this->idEvenement = $row['idEvenement'];
+        $this->idCompo = $row['idCompo'];
+        $this->idMeteo = $row['idMeteo'];
+
     }
 
     /**
@@ -116,14 +131,14 @@ class Lieu{
      */
     public function supprimer(){
         // On écrit la requête
-        $sql = "DELETE FROM " . $this->table . " WHERE idSessionSurf = :idSessionSurf";
+        $sql = "DELETE FROM " . $this->table . " WHERE idLieu = :idLieu";
 
-        $this->idSessionSurf = $_GET['id'];
+        $this->idLieu = $_GET['id'];
 
         // On prépare la requête
         $query = $this->connexion->prepare( $sql );
-        $this->idSessionSurf=htmlspecialchars(strip_tags($this->idSessionSurf));
-        $query->bindParam(":idSessionSurf", $this->idSessionSurf);
+        $this->idLieu=htmlspecialchars(strip_tags($this->idLieu));
+        $query->bindParam(":idLieu", $this->idLieu);
 
         // On exécute la requête
         if($query->execute()){
@@ -140,30 +155,35 @@ class Lieu{
      */
     public function modifier(){
         // On écrit la requête
-        $sql = "UPDATE " . $this->table . " SET longitude=:longitude, idLieu=:idLieu, dateDebut=:dateDebut, dateFin=:dateFin, avisSession=:avisSession, frequentation=:frequentation, latitude=:latitude WHERE idSessionSurf =:idSessionSurf";
+        $sql = "UPDATE " . $this->table . " SET ille=:ville, pays=:pays, photoLieu=:photoLieu, idTemperatureEau=:idTemperatureEau, 
+        idHoule=:idHoule, idMaree=:idMaree, idEvenement=:idEvenement, idCompo=:idCompo, idMeteo=:idMeteo WHERE idLieu =:idLieu";
         
         // On prépare la requête
         $query = $this->connexion->prepare($sql);
         
         // On sécurise les données
         $this->idLieu=htmlspecialchars(strip_tags($this->idLieu));
-        $this->dateDebut=htmlspecialchars(strip_tags($this->dateDebut));
-        $this->dateFin=htmlspecialchars(strip_tags($this->dateFin));
-        $this->avisSession=htmlspecialchars(strip_tags($this->avisSession));
-        $this->frequentation=htmlspecialchars(strip_tags($this->frequentation));
-        $this->latitude=htmlspecialchars(strip_tags($this->latitude));
-        $this->longitude=htmlspecialchars(strip_tags($this->longitude));
-        $this->idSessionSurf=htmlspecialchars(strip_tags($this->idSessionSurf));
+        $this->ville=htmlspecialchars(strip_tags($this->ville));
+        $this->pays=htmlspecialchars(strip_tags($this->pays));
+        $this->photoLieu=htmlspecialchars(strip_tags($this->photoLieu));
+        $this->idMaree=htmlspecialchars(strip_tags($this->idMaree));
+        $this->idHoule=htmlspecialchars(strip_tags($this->idHoule));
+        $this->idEvenement=htmlspecialchars(strip_tags($this->idEvenement));
+        $this->idCompo=htmlspecialchars(strip_tags($this->idCompo));
+        $this->idMeteo=htmlspecialchars(strip_tags($this->idMeteo));
+        $this->idTemperatureEau=htmlspecialchars(strip_tags($this->idTemperatureEau));
         
         // On attache les variables
         $query->bindParam(":idLieu", $this->idLieu);
-        $query->bindParam(":dateDebut", $this->dateDebut);
-        $query->bindParam(":dateFin", $this->dateFin);
-        $query->bindParam(":frequentation", $this->frequentation);
-        $query->bindParam(":avisSession", $this->avisSession);
-        $query->bindParam(":latitude", $this->latitude);
-        $query->bindParam(":longitude", $this->longitude);
-        $query->bindParam(":idSessionSurf", $this->idSessionSurf);
+        $query->bindParam(":ville", $this->ville);
+        $query->bindParam(":pays", $this->pays);
+        $query->bindParam(":photoLieu", $this->photoLieu);
+        $query->bindParam(":idHoule", $this->idHoule);
+        $query->bindParam(":idMaree", $this->idMaree);
+        $query->bindParam(":idEvenement", $this->idEvenement);
+        $query->bindParam(":idCompo", $this->idCompo);
+        $query->bindParam(":idMeteo", $this->idMeteo);
+        $query->bindParam(":idTemperatureEau", $this->idTemperatureEau);
 
         
         // On exécute
