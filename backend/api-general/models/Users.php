@@ -20,6 +20,9 @@ class Users{
      */
     public function __construct($db){
         $this->connexion = $db;
+        if(isset($_GET['id'])){
+            $this->idUti = $_GET['id'];
+        } 
     }
 
     public function lire(){
@@ -79,27 +82,27 @@ class Users{
      * @return void
      */
     public function lireUn(){
-        // On écrit la requête
-        $sql = "SELECT c.nom as categories_nom, p.id, p.nom, p.description, p.prix, p.categories_id, p.created_at FROM " . $this->table . " p LEFT JOIN categories c ON p.categories_id = c.id WHERE p.id = ? LIMIT 0,1";
+
+        $sql = "SELECT * FROM $this->table WHERE idUti = :idUti";
 
         // On prépare la requête
-        $query = $this->connexion->prepare( $sql );
-
-        // On attache l'id
-        $query->bindParam(1, $this->id);
+        $query = $this->connexion->prepare($sql);
+        $this->idUti=htmlspecialchars(strip_tags($this->idUti));
+        $query->bindParam(":idUti", $this->idUti);
 
         // On exécute la requête
         $query->execute();
 
         // on récupère la ligne
         $row = $query->fetch(PDO::FETCH_ASSOC);
-
+        
         // On hydrate l'objet
-        $this->nom = $row['nom'];
-        $this->prix = $row['prix'];
-        $this->description = $row['description'];
-        $this->categories_id = $row['categories_id'];
-        $this->categories_nom = $row['categories_nom'];
+        $this->nomUti = $row['nomUti'];
+        $this->prenomUti = $row['prenomUti'];
+        $this->numTelUti = $row['numTelUti'];
+        $this->mailUti = $row['mailUti'];
+        $this->mdpUti = $row['mdpUti'];
+        $this->admin = $row['admin'];
     }
 
     /**
@@ -118,7 +121,7 @@ class Users{
         $this->idUti=htmlspecialchars(strip_tags($this->idUti));
 
         // On attache l'id
-        $query->bindParam(1, $this->id);
+        $query->bindParam(1, $this->idUti);
 
         // On exécute la requête
         if($query->execute()){

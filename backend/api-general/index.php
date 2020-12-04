@@ -13,6 +13,11 @@ $router->map('POST', '/user', function () {
     require_once 'users/creer.php';
 });
 
+$router->map('GET', '/user/[i:id]', function ($id) {
+    $_GET['id'] = "$id";
+    require_once 'users/lire_un.php';
+});
+
 $router->map('GET', '/session', function () {
     require_once 'sessionSurf/lire.php';
 });

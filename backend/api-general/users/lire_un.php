@@ -9,40 +9,42 @@ header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers
 // On vérifie que la méthode utilisée est correcte
 if($_SERVER['REQUEST_METHOD'] == 'GET'){
     // On inclut les fichiers de configuration et d'accès aux données
-    include_once '../config/Database.php';
-    include_once '../models/Produits.php';
+    include_once 'config/Database.php';
+    include_once 'models/Users.php';
 
     // On instancie la base de données
     $database = new Database();
     $db = $database->getConnection();
 
     // On instancie les produits
-    $produit = new Produits($db);
+    $users = new Users($db);
 
     $donnees = json_decode(file_get_contents("php://input"));
 
-    if(!empty($donnees->id)){
-        $produit->id = $donnees->id;
+    // On récupère le produit
+    $users->lireUn();
+    if(!empty($users->idUti)){
 
         // On récupère le produit
-        $produit->lireUn();
+        $users->lireUn();
 
         // On vérifie si le produit existe
-        if($produit->nom != null){
-
-            $prod = [
-                "id" => $produit->id,
-                "nom" => $produit->nom,
-                "description" => $produit->description,
-                "prix" => $produit->prix,
-                "categories_id" => $produit->categories_id,
-                "categories_nom" => $produit->categories_nom
+        if($users->idUti != null){
+            
+            $tableauUsers = [
+                "nomUti" => $users->nomUti,
+                "prenomUti" =>$users->prenomUti,
+                "numTelUti" => $users->numTelUti,
+                "mailUti" => $users->mailUti,
+                "mdpUti" => $users->mdpUti,
+                "admin" => $users->admin
             ];
+
             // On envoie le code réponse 200 OK
             http_response_code(200);
 
             // On encode en json et on envoie
-            echo json_encode($prod);
+            echo json_encode($tableauUsers);
         }else{
             // 404 Not found
             http_response_code(404);
