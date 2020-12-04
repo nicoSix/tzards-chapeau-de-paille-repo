@@ -1,0 +1,12 @@
+{
+    "name": "pelarrey/nuit",
+    "authors": [
+        {
+            "name": "Louis Pelarrey",
+            "email": "louispelarrey@gmail.com"
+        }
+    ],
+    "require": {
+        "altorouter/altorouter": "^2.0"
+    }
+}
