@@ -5,7 +5,9 @@ import {
   BNavbar, BNavbarBrand, BNavbarToggle,
   BNavbarNav, BCollapse, BNavItem,
   BNavForm, BFormInput, BButton,
-  BNavItemDropdown, BDropdownItem, BToast
+  BNavItemDropdown, BDropdownItem, BToast,
+  BProgress, BProgressBar, BJumbotron, 
+  BContainer, BootstrapVueIcons, BModal, BCard, BForm, BFormGroup, BInputGroup, BCardText
 } from 'bootstrap-vue';
 Vue.component('b-navbar', BNavbar);
 Vue.component('b-navbar-brand', BNavbarBrand);
@@ -19,7 +21,17 @@ Vue.component('b-button', BButton);
 Vue.component('b-toast', BToast);
 Vue.component('b-nav-item-dropdown', BNavItemDropdown);
 Vue.component('b-dropdown-item', BDropdownItem);
-
+Vue.component('b-progress', BProgress);
+Vue.component('b-progress-bar', BProgressBar);
+Vue.component('b-jumbotron', BJumbotron);
+Vue.component('b-container', BContainer);
+Vue.component('b-modal', BModal);
+Vue.component('b-card', BCard);
+Vue.component('b-form', BForm);
+Vue.component('b-form-group', BFormGroup);
+Vue.component('b-input-group', BInputGroup);
+Vue.component('b-card-text', BCardText)
+Vue.use(BootstrapVueIcons)
 
 
 

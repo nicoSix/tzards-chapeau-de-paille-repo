@@ -7,6 +7,48 @@ services:
         - "443:443"
       networks: 
         - nuit
+    db:
+      image: mysql:latest
+      environment:
+        MYSQL_ROOT_PASSWORD: test
+        MYSQL_DATABASE: myDb
+        MYSQL_USER: user
+        MYSQL_PASSWORD: test
+      volumes:
+            - persistent:/var/lib/mysql
+            - ./backend/api-general/dump:/docker-entrypoint-initdb.d
+      ports:
+        - "3306:3306"
+      networks: 
+        - nuit
+      command: ['--character-set-server=utf8mb4', '--collation-server=utf8mb4_unicode_ci','--default-authentication-plugin=mysql_native_password']
+    web:
+      build: backend/api-general
+      container_name: php_web
+      depends_on:
+        - db
+      ports:
+        - "8081:8081"
+      volumes: 
+        - "/Users/kaiser185/workspace/learning/nuit/tzards-chapeau-de-paille-repo/backend/api-general:/var/www/html"
+      stdin_open: true
+      tty: true
+      networks: 
+        - nuit
+      links:
+        - db
+    phpmyadmin:
+        image: phpmyadmin/phpmyadmin
+        ports:
+            - 8000:8000
+        environment:
+            MYSQL_USER: user
+            MYSQL_PASSWORD: test
+            MYSQL_ROOT_PASSWORD: test
+        networks: 
+          - nuit
 networks:
     nuit:
+volumes:
+    persistent:
 
