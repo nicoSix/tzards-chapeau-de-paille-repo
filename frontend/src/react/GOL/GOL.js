@@ -197,7 +197,7 @@ const GOL = () => {
             setStaticDisplay(false);
         }, 1000)
 
-        setTimeout(handleDisplayComponent, 1);
+        setTimeout(handleDisplayComponent, 3000);
         //setTimeout(handleDisplayComponent, 20000);
 
     }, []);
