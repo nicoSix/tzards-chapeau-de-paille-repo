@@ -24,6 +24,21 @@ const GOL = () => {
         return newArray;
     }
 
+    const transposeArray = (array) => {
+        var newArray = [];
+        for(var i = 0; i < array.length; i++){
+            newArray.push([]);
+        };
+    
+        for(var i = 0; i < array.length; i++){
+            for(var j = 0; j < array.length; j++){
+                newArray[j].push(array[i][j]);
+            };
+        };
+    
+        return newArray;
+    }
+
     const initGrid = () => {
         // image-js image live loading was disabled because it brings conflicts with single-spa, but works as a standalone
         /*var loaded = await Image.load(logo);
@@ -31,7 +46,7 @@ const GOL = () => {
         const maxX = parseInt(INITIAL_SQUARE_NUMBER_WIDTH);
         const maxY = parseInt(INITIAL_SQUARE_NUMBER_WIDTH*(window.innerHeight/window.innerWidth));
         //var rgbArray = parseRgbArray(loaded.getPixelsArray(), loaded.width);
-        const rgbArray = rawImage.rawImage;
+        const rgbArray = transposeArray(rawImage.rawImage);
         var widthRgbArray = rgbArray.length;
         var heightRgbArray = rgbArray[0].length;
         var xStartImage = parseInt((maxX/2) - (widthRgbArray/2))
@@ -92,29 +107,31 @@ const GOL = () => {
     }
 
     const gameRoundHandler = p => {
-        var newSquareGrid = cloneDeep(state.squareGrid);
+        if(!staticDisplay) {
+            var newSquareGrid = cloneDeep(state.squareGrid);
 
-        for (let x = 0; x < newSquareGrid.length; x++) {
-            for (let y = 0; y < newSquareGrid[0].length; y++) {
-                var nbNeighbours = countNeighbours(x, y, [...state.squareGrid]);
-                if(newSquareGrid[x][y].living) {
-                    if (nbNeighbours !== 2 && nbNeighbours !== 3) newSquareGrid[x][y] = {
-                        ...newSquareGrid[x][y],
-                        living: false,
-                    };
-                }
-                else {
-                    if (nbNeighbours === 3) newSquareGrid[x][y] = {
-                        living: true,
-                    };
+            for (let x = 0; x < newSquareGrid.length; x++) {
+                for (let y = 0; y < newSquareGrid[0].length; y++) {
+                    var nbNeighbours = countNeighbours(x, y, [...state.squareGrid]);
+                    if(newSquareGrid[x][y].living) {
+                        if (nbNeighbours !== 2 && nbNeighbours !== 3) newSquareGrid[x][y] = {
+                            ...newSquareGrid[x][y],
+                            living: false,
+                        };
+                    }
+                    else {
+                        if (nbNeighbours === 3) newSquareGrid[x][y] = {
+                            living: true,
+                        };
+                    }
                 }
             }
-        }
 
-        setState({
-            ...state, 
-            squareGrid: newSquareGrid
-        })
+            setState({
+                ...state, 
+                squareGrid: newSquareGrid
+            })
+        }
     }
 
     const [state, setState] = useState({
@@ -123,14 +140,16 @@ const GOL = () => {
             h: window.innerHeight
         },
         squareGrid: [],
-        squareSize: INITIAL_SQUARE_NUMBER_WIDTH,
-        doTheDraw: true
+        squareSize: INITIAL_SQUARE_NUMBER_WIDTH
     })
+
+    const [staticDisplay, setStaticDisplay] = useState(true);
+    const [doTheDraw, setDoTheDraw] = useState(true);
 
     useEffect(() => {
         window.addEventListener("resize", handleDimensionChange);
         
-        const interval = setInterval(gameRoundHandler, 400);
+        const interval = setInterval(gameRoundHandler, 100);
 
         return () => {
             window.removeEventListener("resize", handleDimensionChange);
@@ -139,24 +158,24 @@ const GOL = () => {
     })
 
     const handleDisplayComponent = () => {
-        if(state.doTheDraw) {
-            setState({
-                ...state,
-                doTheDraw: false
-            })
+        console.log('trigger')
+        if(doTheDraw) {
+            setDoTheDraw(false);
 
             document.getElementById('react').setAttribute("hidden", "true");
+            document.getElementById('vue').removeAttribute("hidden");
         }
         else {
             const grid = initGrid();
 
+            setDoTheDraw(false);
             setState({
                 ...state,
-                doTheDraw: true,
                 squareGrid: grid
             })
 
-            document.getElementById('react').setAttribute("hidden", "false");
+            document.getElementById('react').removeAttribute("hidden");
+            document.getElementById('vue').setAttribute("hidden", "true");
         }
     }
 
@@ -174,13 +193,17 @@ const GOL = () => {
             squareGrid: grid
         })
 
-        setTimeout(handleDisplayComponent, 3000);
-        //setTimeout(handleDisplayComponent, 6000);
+        setTimeout(() => {
+            setStaticDisplay(false);
+        }, 5000)
+
+        setTimeout(handleDisplayComponent, 10000);
+        setTimeout(handleDisplayComponent, 20000);
 
     }, []);
   
     // Note : the component triggers a redraw + prop change whenever the parent component (GOF) is mounted
-    return <P5Wrapper sketch={SketchObject} dimensions={state.dimensions} squareSize={state.squareSize} squareGrid={state.squareGrid} devMode={DEV_MODE} doTheDraw={state.doTheDraw}/>
+    return <P5Wrapper sketch={SketchObject} dimensions={state.dimensions} squareSize={state.squareSize} squareGrid={state.squareGrid} devMode={DEV_MODE} doTheDraw={doTheDraw}/>
 }
 
 export default GOL
