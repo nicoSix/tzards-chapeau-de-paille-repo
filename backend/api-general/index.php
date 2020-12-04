@@ -21,16 +21,19 @@ $router->map('POST', '/session', function () {
     require_once 'sessionSurf/creer.php';
 });
 
-$router->map('GET', '/session/[i:id]', function () {
-    require_once 'sessionSurf/lire_un.php&id=' . $id;
+$router->map('GET', '/session/[i:id]', function ($id) {
+    $_GET['id'] = "$id";
+    require_once "sessionSurf/lire_un.php";
 });
 
-$router->map('PUT', '/session/[i:id]', function () {
-    require_once 'sessionSurf/modifier.php&id=' . $id;
+$router->map('PUT', '/session/[i:id]', function ($id) {
+    $_GET['id'] = "$id";
+    require_once "sessionSurf/modifier.php";
 });
 
-$router->map('DELETE', '/session/[i:id]', function () {
-    require_once 'sessionSurf/modifier.php&id=' . $id;
+$router->map('DELETE', '/session/[i:id]', function ($id) {
+    $_GET['id'] = "$id";
+    require_once "sessionSurf/supprimer.php";
 });
 
 $match = $router->match();

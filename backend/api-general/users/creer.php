@@ -23,28 +23,28 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
     // On récupère les informations envoyées
     $donnees = json_decode(file_get_contents('php://input'));
 
-    if(!empty($donnees->nomUti) && !empty($donnees->prenomUti) && !empty($donnees->numTelUti) && !empty($donnees->mailUti) && !empty($donnees->mdpUti) && !empty($donnees->admin)){
-        // Ici on a reçu les données
-        // On hydrate notre objet
-        $users->nomUti = $donnees->nomUti;
-        $users->prenomUti = $donnees->prenomUti;
-        $users->numTelUti = $donnees->numTelUti;
-        $users->mailUti = $donnees->mailUti;
-        $users->mdpUti = $donnees->mdpUti;
-        $users->admin = $donnees->admin;
+        if(!empty($donnees->nomUti) && !empty($donnees->prenomUti) && !empty($donnees->numTelUti) && !empty($donnees->mailUti) && !empty($donnees->mdpUti) && !empty($donnees->admin)){
+            // Ici on a reçu les données
+            // On hydrate notre objet
+            $users->nomUti = $donnees->nomUti;
+            $users->prenomUti = $donnees->prenomUti;
+            $users->numTelUti = $donnees->numTelUti;
+            $users->mailUti = $donnees->mailUti;
+            $users->mdpUti = $donnees->mdpUti;
+            $users->admin = $donnees->admin;
 
-        if($users->creer()){
-            // Ici la création a fonctionné
-            // On envoie un code 201
-            http_response_code(201);
-            echo json_encode(["message" => "L'ajout a été effectué"]);
-        }else{
-            // Ici la création n'a pas fonctionné
-            // On envoie un code 503
-            http_response_code(503);
-            echo json_encode(["message" => "L'ajout n'a pas été effectué"]);         
-        } 
-    }
+            if($users->creer()){
+                // Ici la création a fonctionné
+                // On envoie un code 201
+                http_response_code(201);
+                echo json_encode(["message" => "L'ajout a été effectué"]);
+            }else{
+                // Ici la création n'a pas fonctionné
+                // On envoie un code 503
+                http_response_code(503);
+                echo json_encode(["message" => "L'ajout n'a pas été effectué"]);         
+            } 
+        }
     }else{
     // On gère l'erreur
     http_response_code(405);

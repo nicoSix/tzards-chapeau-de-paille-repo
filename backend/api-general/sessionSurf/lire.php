@@ -10,46 +10,48 @@ header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers
 if($_SERVER['REQUEST_METHOD'] == 'GET'){
     // On inclut les fichiers de configuration et d'accès aux données
     include_once 'config/Database.php';
-    include_once 'models/Users.php';
+    include_once 'models/Session.php';
 
     // On instancie la base de données
     $database = new Database();
     $db = $database->getConnection();
 
     // On instancie les produits
-    $users = new Users($db);
+    $session = new Session($db);
 
     // On récupère les données
-    $stmt = $users->lire();
+    $stmt = $session->lire();
 
     // On vérifie si on a au moins 1 produit
     if($stmt->rowCount() > 0){
         // On initialise un tableau associatif
-        $tableauUsers = [];
-        $tableauUsers['Users'] = [];
+        $tableauSession = [];
+        $tableauSession['Session'] = [];
 
         // On parcourt les produits
         while($row = $stmt->fetch(PDO::FETCH_ASSOC)){
             extract($row);
 
-            $user = [
-                "idUti" => $idUti,
-                "nomUti" => $nomUti,
-                "prenomUti" => $prenomUti,
-                "numTelUti" => $numTelUti,
-                "mailUti" => $mailUti,
-                "mdpUti" => $mdpUti,
-                "admin" => $admin
+            $session = [
+                "idSessionSurf" => $idSessionSurf,
+                "dateDebut" => $dateDebut,
+                "dateFin" => $dateFin,
+                "avisSession" => $avisSession,
+                "frequentation" => $frequentation,
+                "latitude" => $latitude,
+                "longitude" => $longitude,
+                "idLieu" => $idLieu
+
             ];
 
-            $tableauUsers['Users'][] = $user;
+            $tableauSession['Session'][] = $session;
         }
 
         // On envoie le code réponse 200 OK
         http_response_code(200);
 
         // On encode en json et on envoie
-        echo json_encode($tableauUsers);
+        echo json_encode($tableauSession);
     }
 
 }else{

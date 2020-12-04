@@ -10,14 +10,14 @@ header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers
 if($_SERVER['REQUEST_METHOD'] == 'PUT'){
     // On inclut les fichiers de configuration et d'accès aux données
     include_once 'config/Database.php';
-    include_once 'models/Users.php';
+    include_once 'models/Session.php';
 
     // On instancie la base de données
     $database = new Database();
     $db = $database->getConnection();
 
     // On instancie les produits
-    $user = new Users($db);
+    $session = new Session($db);
 
     // On récupère les informations envoyées
     $donnees = json_decode(file_get_contents("php://input"));
@@ -26,7 +26,6 @@ if($_SERVER['REQUEST_METHOD'] == 'PUT'){
     && !empty($donnees->idLieu)){        
         // Ici on a reçu les données
         // On hydrate notre objet
-        $session->idSessionSurf = $donnees->idSessionSurf;
         $session->dateDebut = $donnees->dateDebut;
         $session->dateFin = $donnees->dateFin;
         $session->avisSession = $donnees->avisSession;
@@ -35,7 +34,7 @@ if($_SERVER['REQUEST_METHOD'] == 'PUT'){
         $session->longitude = $donnees->longitude;
         $session->idLieu = $donnees->idLieu;
 
-        if($user->modifier()){
+        if($session->modifier()){
             // Ici la modification a fonctionné
             // On envoie un code 200
             http_response_code(200);

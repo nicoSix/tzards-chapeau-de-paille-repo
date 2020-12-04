@@ -9,23 +9,20 @@ header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers
 // On vérifie que la méthode utilisée est correcte
 if($_SERVER['REQUEST_METHOD'] == 'DELETE'){
     // On inclut les fichiers de configuration et d'accès aux données
-    include_once '../config/Database.php';
-    include_once '../models/Produits.php';
+    include_once 'config/Database.php';
+    include_once 'models/Session.php';
 
     // On instancie la base de données
     $database = new Database();
     $db = $database->getConnection();
 
     // On instancie les produits
-    $user = new Users($db);
+    $session = new Session($db);
 
     // On récupère l'id du produit
     $donnees = json_decode(file_get_contents("php://input"));
 
-    if(!empty($donnees->idUti)){
-        $user->idUti = $donnees->idUti;
-
-        if($user->supprimer()){
+        if($session->supprimer()){
             // Ici la suppression a fonctionné
             // On envoie un code 200
             http_response_code(200);
@@ -36,7 +33,7 @@ if($_SERVER['REQUEST_METHOD'] == 'DELETE'){
             http_response_code(503);
             echo json_encode(["message" => "La suppression n'a pas été effectuée"]);         
         }
-    }
+
 }else{
     // On gère l'erreur
     http_response_code(405);
