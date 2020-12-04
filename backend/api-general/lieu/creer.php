@@ -8,48 +8,50 @@ header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers
 
 // On vérifie la méthode
 if($_SERVER['REQUEST_METHOD'] == 'POST'){
-
     // On inclut les fichiers de configuration et d'accès aux données
 
     include_once 'config/Database.php';
-    include_once 'models/Session.php';
+    include_once 'models/Lieu.php';
 
     // On instancie la base de données
     $database = new Database();
     $db = $database->getConnection();
 
     // On instancie les produits
-    $session = new Session($db);
+    $lieu = new Lieu($db);
 
     // On récupère les informations envoyées
     $donnees = json_decode(file_get_contents('php://input'));
 
-    if(!empty($donnees->dateDebut) && !empty($donnees->dateFin) && !empty($donnees->avisSession) && !empty($donnees->frequentation) && !empty($donnees->latitude) && !empty($donnees->longitude)
-&& !empty($donnees->idLieu)){
-        // Ici on a reçu les données
-        // On hydrate notre objet
-        $session->dateDebut = $donnees->dateDebut;
-        $session->dateFin = $donnees->dateFin;
-        $session->avisSession = $donnees->avisSession;
-        $session->frequentation = $donnees->frequentation;
-        $session->latitude = $donnees->latitude;
-        $session->longitude = $donnees->longitude;
-        $session->idLieu = $donnees->idLieu;
+        if(!empty($donnees->ville) && !empty($donnees->pays) && !empty($donnees->photoLieu) && !empty($donnees->idTemperatureEau) && !empty($donnees->idHoule) 
+        && !empty($donnees->idMaree) && !empty($donnees->idEvenement) && !empty($donnees->idCompo) && !empty($donnees->idMeteo)){
+            // Ici on a reçu les données
+            // On hydrate notre objet
+            $lieu->ville = $donnees->ville;
+            $lieu->pays = $donnees->pays;
+            $lieu->photoLieu = $donnees->photoLieu;
+            $lieu->idTemperatureEau = $donnees->idTemperatureEau;
+            $lieu->idHoule = $donnees->idHoule;
+            $lieu->idMaree = $donnees->idMaree;
+            $lieu->idEvenement = $donnees->idEvenement;
+            $lieu->idCompo = $donnees->idCompo;
+            $lieu->idMeteo = $donnees->idMeteo;
+    
 
-        if($session->creer()){
-            // Ici la création a fonctionné
-            // On envoie un code 201
-            http_response_code(201);
-            echo json_encode(["message" => "L'ajout a été effectué"]);
-        }else{
-            // Ici la création n'a pas fonctionné
-            // On envoie un code 503
-            http_response_code(503);
-            echo json_encode(["message" => "L'ajout n'a pas été effectué"]);         
+            if($lieu->creer()){
+                // Ici la création a fonctionné
+                // On envoie un code 201
+                http_response_code(201);
+                echo json_encode(["message" => "L'ajout a été effectué"]);
+            }else{
+                // Ici la création n'a pas fonctionné
+                // On envoie un code 503
+                http_response_code(503);
+                echo json_encode(["message" => "L'ajout n'a pas été effectué"]);         
+            } 
         }
-        }
-}else{
+    }else{
     // On gère l'erreur
     http_response_code(405);
     echo json_encode(["message" => "La méthode n'est pas autorisée"]);
-}
+    }

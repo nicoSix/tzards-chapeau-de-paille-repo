@@ -41,6 +41,16 @@ $router->map('DELETE', '/session/[i:id]', function ($id) {
     require_once "sessionSurf/supprimer.php";
 });
 
+$router->map('GET', '/lieu', function ($id) {
+    $_GET['id'] = "$id";
+    require_once "lieu/lire.php";
+});
+
+$router->map('GET', '/session/[i:id]', function ($id) {
+    $_GET['id'] = "$id";
+    require_once "sessionSurf/lire_un.php";
+});
+
 $match = $router->match();
 
 if ($match) {

@@ -10,48 +10,50 @@ header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers
 if($_SERVER['REQUEST_METHOD'] == 'GET'){
     // On inclut les fichiers de configuration et d'accès aux données
     include_once 'config/Database.php';
-    include_once 'models/Session.php';
+    include_once 'models/Lieu.php';
 
     // On instancie la base de données
     $database = new Database();
     $db = $database->getConnection();
 
     // On instancie les produits
-    $session = new Session($db);
+    $lieu = new Lieu($db);
 
     // On récupère les données
-    $stmt = $session->lire();
+    $stmt = $Lieu->lire();
 
     // On vérifie si on a au moins 1 produit
     if($stmt->rowCount() > 0){
         // On initialise un tableau associatif
-        $tableauSession = [];
-        $tableauSession['Session'] = [];
+        $tableauLieu = [];
+        $tableauLieu['Lieu'] = [];
 
         // On parcourt les produits
         while($row = $stmt->fetch(PDO::FETCH_ASSOC)){
             extract($row);
-
-            $session = [
-                "idSessionSurf" => $idSessionSurf,
-                "dateDebut" => $dateDebut,
-                "dateFin" => $dateFin,
-                "avisSession" => $avisSession,
-                "frequentation" => $frequentation,
-                "latitude" => $latitude,
-                "longitude" => $longitude,
-                "idLieu" => $idLieu
+       
+            $lieu = [
+                "idLieu" => $idLieu,
+                "ville" => $ville,
+                "pays" => $pays,
+                "photoLieu" => $photoLieu,
+                "idTemperatureEau" => $idTemperatureEau,
+                "idHoule" => $idHoule,
+                "idMaree" => $idMaree,
+                "idEvenement" => $idEvenement,
+                "idCompo" => $idCompo,
+                "idMeteo" => $idMeteo
 
             ];
 
-            $tableauSession['Session'][] = $session;
+            $tableauLieu['Lieu'][] = $lieu;
         }
 
         // On envoie le code réponse 200 OK
         http_response_code(200);
 
         // On encode en json et on envoie
-        echo json_encode($tableauSession);
+        echo json_encode($tableauLieu);
     }
 
 }else{
