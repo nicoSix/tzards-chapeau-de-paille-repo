@@ -3,7 +3,7 @@ import P5Wrapper from 'react-p5-wrapper';
 import './style.css';
 import SketchObject from './sketch';
 //import { Image } from 'image-js';
-import logo from './image.jpg'
+//import logo from './logo.jpg'
 import { cloneDeep } from 'lodash';
 import rawImage from './rawImage';
 
@@ -195,10 +195,10 @@ const GOL = () => {
 
         setTimeout(() => {
             setStaticDisplay(false);
-        }, 5000)
+        }, 1000)
 
-        setTimeout(handleDisplayComponent, 10000);
-        setTimeout(handleDisplayComponent, 20000);
+        setTimeout(handleDisplayComponent, 1);
+        //setTimeout(handleDisplayComponent, 20000);
 
     }, []);
   

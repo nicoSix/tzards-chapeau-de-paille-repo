@@ -4,6 +4,7 @@
   "main": "index.js",
   "license": "MIT",
   "dependencies": {
+    "bootstrap-vue": "^2.20.1",
     "google-maps-api-loader": "^1.1.1",
     "image-js": "^0.31.1",
     "lodash": "^4.17.20",
@@ -15,6 +16,7 @@
     "react-router-dom": "^5.0.1",
     "react-scripts": "^4.0.1",
     "react-transition-group": "^4.1.1",
+    "register-service-worker": "^1.7.1",
     "single-spa": "^4.3.4",
     "single-spa-react": "^2.10.2",
     "single-spa-vue": "^1.4.0",
