@@ -13,16 +13,32 @@ $router->map('POST', '/user', function () {
     require_once 'users/creer.php';
 });
 
+$router->map('GET', '/user/[i:id]', function ($id) {
+    $_GET['id'] = "$id";
+    require_once 'users/lire_un.php';
+});
+
 $router->map('GET', '/session', function () {
     require_once 'sessionSurf/lire.php';
 });
 
-$router->map('GET', '/session/[]', function () {
-    require_once 'sessionSurf/lire_un.php';
-});
-
 $router->map('POST', '/session', function () {
     require_once 'sessionSurf/creer.php';
+});
+
+$router->map('GET', '/session/[i:id]', function ($id) {
+    $_GET['id'] = "$id";
+    require_once "sessionSurf/lire_un.php";
+});
+
+$router->map('PUT', '/session/[i:id]', function ($id) {
+    $_GET['id'] = "$id";
+    require_once "sessionSurf/modifier.php";
+});
+
+$router->map('DELETE', '/session/[i:id]', function ($id) {
+    $_GET['id'] = "$id";
+    require_once "sessionSurf/supprimer.php";
 });
 
 $match = $router->match();
