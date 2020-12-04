@@ -22,8 +22,8 @@ if($_SERVER['REQUEST_METHOD'] == 'PUT'){
     // On récupère les informations envoyées
     $donnees = json_decode(file_get_contents("php://input"));
     
-    if(!empty($donnees->dateDebut) && !empty($donnees->dateFin) && !empty($donnees->avisSession) && !empty($donnees->frequentation) && !empty($donnees->latitude) && !empty($donnees->longitude)
-    && !empty($donnees->idLieu)){        
+    if(!empty($donnees->ville) && !empty($donnees->pays) && !empty($donnees->photoLieu) && !empty($donnees->idTemperatureEau) && !empty($donnees->idHoule) 
+        && !empty($donnees->idMaree) && !empty($donnees->idEvenement) && !empty($donnees->idCompo) && !empty($donnees->idMeteo)){     
         // Ici on a reçu les données
         // On hydrate notre objet
         $session->dateDebut = $donnees->dateDebut;
