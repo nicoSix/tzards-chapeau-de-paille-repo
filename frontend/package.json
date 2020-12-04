@@ -4,6 +4,7 @@
   "main": "index.js",
   "license": "MIT",
   "dependencies": {
+    "bootstrap-vue": "^2.20.1",
     "google-maps-api-loader": "^1.1.1",
     "image-js": "^0.31.1",
     "lodash": "^4.17.20",

@@ -175,7 +175,7 @@ const GOL = () => {
         })
 
         setTimeout(handleDisplayComponent, 3000);
-        setTimeout(handleDisplayComponent, 6000);
+        //setTimeout(handleDisplayComponent, 6000);
 
     }, []);
   
